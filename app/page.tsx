@@ -55,9 +55,18 @@ export default function Home() {
       paddingTop: 'env(safe-area-inset-top)',
       paddingBottom: 'env(safe-area-inset-bottom)',
       paddingLeft: 'env(safe-area-inset-left)',
-      paddingRight: 'env(safe-area-inset-right)'
+      paddingRight: 'env(safe-area-inset-right)',
+      overflowX: 'hidden',
+      overflowY: 'auto',
+      WebkitOverflowScrolling: 'touch'
     }}>
-      <div style={{ maxWidth: '480px', margin: '0 auto', padding: '24px 20px' }}>
+      <div style={{ 
+        maxWidth: '480px', 
+        margin: '0 auto', 
+        padding: '24px 20px',
+        width: '100%',
+        boxSizing: 'border-box'
+      }}>
         
         {/* Header */}
         <header style={{ marginBottom: '32px' }}>
@@ -100,9 +109,12 @@ export default function Home() {
           borderBottom: '1px solid var(--border)',
           paddingBottom: '12px',
           justifyContent: 'space-between',
-          alignItems: 'center'
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          width: '100%',
+          boxSizing: 'border-box'
         }}>
-          <div style={{ display: 'flex', gap: '24px' }}>
+          <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
             <button
               onClick={() => setActiveTab('list')}
               style={{
@@ -116,7 +128,8 @@ export default function Home() {
                 textUnderlineOffset: '4px',
                 minHeight: '44px',
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                whiteSpace: 'nowrap'
               }}
             >
               entries ({expenses.length})
@@ -134,14 +147,15 @@ export default function Home() {
                 textUnderlineOffset: '4px',
                 minHeight: '44px',
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                whiteSpace: 'nowrap'
               }}
             >
               analytics
             </button>
           </div>
           {activeTab === 'list' && (
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               {(['day', 'week', 'month'] as const).map((range) => (
                 <button
                   key={range}
@@ -155,7 +169,9 @@ export default function Home() {
                     cursor: 'pointer',
                     color: timeRange === range ? 'var(--bg)' : 'var(--muted)',
                     fontFamily: 'inherit',
-                    textTransform: 'uppercase'
+                    textTransform: 'uppercase',
+                    minHeight: '32px',
+                    whiteSpace: 'nowrap'
                   }}
                 >
                   {range}
