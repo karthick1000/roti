@@ -2,6 +2,11 @@
 
 A clean, simple expense tracking app that helps you log expenses quickly without the bloat.
 
+Created this out of frustration as the existing trackers are too bloated with unwanted features and ads, this is for people who just want keep track of expenses in a ledger and see track them, nothing more nothing less.
+
+Also data is a serious concern now a days and data about your money is extra serious, so made this whole thing process in your local, used compression algos to free up space as it is local.
+
+
 ## ✨ Features
 
 - **Fast Input**: Log expenses with natural language (e.g., "100 chai #food")
@@ -106,13 +111,10 @@ npm start
 3. Make your changes
 4. Submit a pull request
 
-## 📄 License
-
-MIT License - feel free to use this project for personal or commercial use.
 
 ## 🙏 Acknowledgments
 
-Made with 🤍 in Chennai
+Made with 🤍 from karthick
 
 ---
 
