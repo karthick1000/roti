@@ -21,7 +21,7 @@ Also data is a serious concern now a days and data about your money is extra ser
 ## 🚀 Quick Start
 
 ### Web App
-1. Visit [Roti tracker](https:\\www.rotitracker.space)
+1. Visit [Roti tracker](https://rotitracker.space)
 2. Start logging expenses immediately
 3. Your data is saved automatically in your browser
 
