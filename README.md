@@ -21,7 +21,7 @@ Also data is a serious concern now a days and data about your money is extra ser
 ## 🚀 Quick Start
 
 ### Web App
-1. Visit [roti-expense-tracker.vercel.app](https://roti-expense-tracker.vercel.app)
+1. Visit [Roti tracker](www.rotitracker.space)
 2. Start logging expenses immediately
 3. Your data is saved automatically in your browser
 
