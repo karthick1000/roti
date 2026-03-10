@@ -20,6 +20,9 @@ html {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -28,6 +31,35 @@ body {
   font-family: var(--font-mono);
   margin: 0;
   min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+/* Responsive base */
+@media (max-width: 640px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 1025px) {
+  html {
+    font-size: 14px;
+  }
 }
 
 ::selection {
@@ -37,6 +69,30 @@ body {
 
 input, button {
   font-family: inherit;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--bg);
 }
 
 @keyframes slideIn {
@@ -52,4 +108,12 @@ input, button {
 
 .slide-in {
   animation: slideIn 0.2s ease-out;
+}
+
+/* Touch-friendly tap targets */
+@media (pointer: coarse) {
+  button, input {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
