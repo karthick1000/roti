@@ -1,65 +1,191 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { Expense } from '@/lib/types';
+import { getExpenses, getCurrency, formatAmount } from '@/lib/storage';
+import ExpenseInput from './components/ExpenseInput';
+import ExpenseList from './components/ExpenseList';
+import ExpenseGraphs from './components/ExpenseGraphs';
+import Settings from './components/Settings';
 
 export default function Home() {
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [currency, setCurrencyState] = useState('INR');
+  const [activeTab, setActiveTab] = useState<'list' | 'graphs'>('list');
+  const [timeRange, setTimeRange] = useState<'day' | 'week' | 'month'>('week');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    setExpenses(getExpenses());
+    setCurrencyState(getCurrency());
+  }, []);
+
+  const refreshExpenses = useCallback(() => {
+    setExpenses(getExpenses());
+    setCurrencyState(getCurrency());
+  }, []);
+
+  const handleExpenseAdded = useCallback((expense: Expense) => {
+    setExpenses(prev => [expense, ...prev]);
+    setCurrencyState(getCurrency());
+  }, []);
+
+  const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+
+  if (!mounted) {
+    return (
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        background: 'var(--bg)',
+        color: 'var(--muted)'
+      }}>
+        ...
+      </div>
+    );
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div style={{ 
+      minHeight: '100dvh', 
+      background: 'var(--bg)',
+      paddingTop: 'env(safe-area-inset-top)',
+      paddingBottom: 'env(safe-area-inset-bottom)',
+      paddingLeft: 'env(safe-area-inset-left)',
+      paddingRight: 'env(safe-area-inset-right)'
+    }}>
+      <div style={{ maxWidth: '480px', margin: '0 auto', padding: '24px 20px' }}>
+        
+        {/* Header */}
+        <header style={{ marginBottom: '32px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+            <h1 style={{ 
+              fontSize: '24px', 
+              fontWeight: 700, 
+              margin: 0,
+              letterSpacing: '-0.02em',
+              color: 'var(--accent)'
+            }}>
+              Roti
+            </h1>
+            {expenses.length > 0 && (
+              <span style={{ color: 'var(--muted)', fontSize: '12px' }}>
+                {formatAmount(total, currency)}
+              </span>
+            )}
+          </div>
+          <p style={{ 
+            margin: '4px 0 0 0', 
+            color: 'var(--muted)', 
+            fontSize: '12px',
+            fontStyle: 'italic'
+          }}>
+            log & go. zero fluff.
           </p>
+        </header>
+
+        {/* Input */}
+        <div style={{ marginBottom: '24px' }}>
+          <ExpenseInput onExpenseAdded={handleExpenseAdded} />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+        {/* Tabs */}
+        <div style={{ 
+          display: 'flex', 
+          gap: '24px', 
+          marginBottom: '20px',
+          borderBottom: '1px solid var(--border)',
+          paddingBottom: '12px',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <div style={{ display: 'flex', gap: '24px' }}>
+            <button
+              onClick={() => setActiveTab('list')}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: '8px 0',
+                fontSize: '13px',
+                cursor: 'pointer',
+                color: activeTab === 'list' ? 'var(--fg)' : 'var(--muted)',
+                textDecoration: activeTab === 'list' ? 'underline' : 'none',
+                textUnderlineOffset: '4px',
+                minHeight: '44px',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
+              entries ({expenses.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('graphs')}
+              style={{
+                background: 'none',
+                border: 'none',
+                padding: '8px 0',
+                fontSize: '13px',
+                cursor: 'pointer',
+                color: activeTab === 'graphs' ? 'var(--fg)' : 'var(--muted)',
+                textDecoration: activeTab === 'graphs' ? 'underline' : 'none',
+                textUnderlineOffset: '4px',
+                minHeight: '44px',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
+              analytics
+            </button>
+          </div>
+          {activeTab === 'list' && (
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {(['day', 'week', 'month'] as const).map((range) => (
+                <button
+                  key={range}
+                  onClick={() => setTimeRange(range)}
+                  style={{
+                    background: timeRange === range ? 'var(--accent)' : 'none',
+                    border: timeRange === range ? 'none' : '1px solid var(--border)',
+                    padding: '4px 10px',
+                    borderRadius: '4px',
+                    fontSize: '11px',
+                    cursor: 'pointer',
+                    color: timeRange === range ? 'var(--bg)' : 'var(--muted)',
+                    fontFamily: 'inherit',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  {range}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Content */}
+        <main>
+          {activeTab === 'list' ? (
+            <ExpenseList 
+              expenses={expenses} 
+              currency={currency}
+              onExpensesChange={refreshExpenses}
+              timeRange={timeRange}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+          ) : (
+            <ExpenseGraphs 
+              expenses={expenses} 
+              currency={currency}
+            />
+          )}
+        </main>
+
+        {/* Settings */}
+        <Settings onDataReset={refreshExpenses} />
+
+      </div>
     </div>
   );
 }

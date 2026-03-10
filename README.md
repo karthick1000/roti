@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Roti - Minimal Expense Tracker
 
-## Getting Started
+A clean, simple expense tracking app that helps you log expenses quickly without the bloat.
 
-First, run the development server:
+## ✨ Features
 
+- **Fast Input**: Log expenses with natural language (e.g., "100 chai #food")
+- **Smart Tags**: Organize expenses with hashtags
+- **Time Filters**: View expenses by day, week, or month
+- **Analytics**: Visual charts and spending insights
+- **Multi-Currency**: Support for INR, USD, EUR, GBP
+- **Data Storage**: All data stored locally on your device
+- **No Tracking**: Completely private, no analytics or tracking
+- **Responsive**: Works perfectly on mobile and desktop
+
+## 🚀 Quick Start
+
+### Web App
+1. Visit [roti-expense-tracker.vercel.app](https://roti-expense-tracker.vercel.app)
+2. Start logging expenses immediately
+3. Your data is saved automatically in your browser
+
+### Mobile Installation
+
+#### iOS (Safari)
+1. Open Safari and go to the app URL
+2. Tap the **Share** button (square with arrow)
+3. Select **Add to Home Screen**
+4. Tap **Add** to install on your home screen
+
+#### Android (Chrome)
+1. Open Chrome and go to the app URL
+2. Tap the **Menu** button (three dots)
+3. Select **Add to Home screen** or **Install app**
+4. Tap **Add** or **Install**
+
+## 📱 How to Use
+
+### Adding Expenses
+1. Select your currency using the currency button
+2. Type your expense: `amount description #tag1 #tag2`
+3. Press Enter or tap the + button
+
+**Examples:**
+- `50 coffee #food`
+- `1200 rent #housing`
+- `25 uber #transport #work`
+
+### Viewing Data
+- **Entries Tab**: See all expenses with filters (day/week/month)
+- **Analytics Tab**: View charts and spending insights
+- **Settings**: Check data size and reset if needed
+
+### Currency Support
+- ₹ Indian Rupee (INR)
+- $ US Dollar (USD)
+- € Euro (EUR)
+- £ British Pound (GBP)
+
+## 🛠️ Local Development
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/expense-tracker-roti.git
+cd expense-tracker-roti
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Running
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Building
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## 📊 Data & Privacy
 
-To learn more about Next.js, take a look at the following resources:
+- **Local Storage**: All data stored in your browser's localStorage
+- **No Server**: No data sent to any server
+- **Privacy First**: No analytics, tracking, or data collection
+- **Export**: Your data stays with you
+- **Reset**: Clear all data with one click in settings
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🎨 Design Principles
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Minimal**: No unnecessary features or complexity
+- **Fast**: Instant loading and response
+- **Clean**: Simple, distraction-free interface
+- **Mobile-First**: Optimized for phone usage
+- **Offline**: Works without internet connection
 
-## Deploy on Vercel
+## 🤝 Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 License
+
+MIT License - feel free to use this project for personal or commercial use.
+
+## 🙏 Acknowledgments
+
+Made with 🤍 in Chennai
+
+---
+
+**Roti** - Because tracking expenses should be as simple as eating roti.
