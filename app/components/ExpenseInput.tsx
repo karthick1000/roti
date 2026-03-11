@@ -12,13 +12,31 @@ export default function ExpenseInput({ onExpenseAdded }: ExpenseInputProps) {
   const [input, setInput] = useState('');
   const [currency, setCurrencyState] = useState('INR');
   const [showCurrencySheet, setShowCurrencySheet] = useState(false);
+  const [validationError, setValidationError] = useState('');
+  const [showInfoTooltip, setShowInfoTooltip] = useState(false);
 
   useEffect(() => {
     setCurrencyState(getCurrency());
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showInfoTooltip) {
+        setShowInfoTooltip(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [showInfoTooltip]);
+
+  const MAX_INPUT_LENGTH = 50;
+
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Don't submit if there are validation errors
+    if (validationError) return;
     
     const parsed = parseInput(input);
     if (parsed.amount === null && !parsed.note) return;
@@ -35,7 +53,8 @@ export default function ExpenseInput({ onExpenseAdded }: ExpenseInputProps) {
     saveExpense(expense);
     onExpenseAdded(expense);
     setInput('');
-  }, [input, currency, onExpenseAdded]);
+    setValidationError('');
+  }, [input, currency, onExpenseAdded, validationError]);
 
   const handleCurrencyChange = (newCurrency: string) => {
     setCurrencyState(newCurrency);
@@ -73,14 +92,36 @@ export default function ExpenseInput({ onExpenseAdded }: ExpenseInputProps) {
           <input
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              
+              // Check input length
+              if (newValue.length > MAX_INPUT_LENGTH) {
+                setValidationError(`Input exceeds maximum length of ${MAX_INPUT_LENGTH} characters`);
+                return; // Don't update input if it exceeds limit
+              }
+              
+              setInput(newValue);
+              
+              // Real-time validation for amount
+              if (newValue.trim()) {
+                const parsed = parseInput(newValue);
+                if (parsed.amount !== null && Math.abs(parsed.amount) > 999999) {
+                  setValidationError('Amount exceeds maximum limit (999,999)');
+                } else {
+                  setValidationError('');
+                }
+              } else {
+                setValidationError('');
+              }
+            }}
             placeholder="100 chai #food"
             enterKeyHint="done"
             style={{
               flex: 1,
               background: 'transparent',
               border: 'none',
-              borderBottom: '2px solid var(--border)',
+              borderBottom: validationError ? '2px solid var(--accent, #ff6b6b)' : '2px solid var(--border)',
               padding: '16px 0',
               fontSize: '22px',
               outline: 'none',
@@ -111,8 +152,82 @@ export default function ExpenseInput({ onExpenseAdded }: ExpenseInputProps) {
               +
             </button>
           )}
+          {!input.trim() && (
+            <div style={{ position: 'relative', marginLeft: '8px' }}>
+              <button
+                type="button"
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--muted)',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  padding: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: '50%',
+                  minHeight: '28px',
+                  minWidth: '28px',
+                  transition: 'color 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = 'var(--fg)';
+                  setShowInfoTooltip(true);
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = 'var(--muted)';
+                  setShowInfoTooltip(false);
+                }}
+                onTouchStart={(e) => {
+                  e.preventDefault();
+                  setShowInfoTooltip(!showInfoTooltip);
+                }}
+                aria-label="Input help"
+              >
+                i
+              </button>
+              {showInfoTooltip && (
+                <div 
+                  style={{
+                    position: 'absolute',
+                    top: '100%',
+                    right: '0',
+                    marginTop: '8px',
+                    background: 'var(--surface)',
+                    border: '1px solid var(--border)',
+                    borderRadius: '8px',
+                    padding: '12px',
+                    fontSize: '12px',
+                    color: 'var(--fg)',
+                    width: '200px',
+                    zIndex: 10,
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                  }}
+                >
+                  <div style={{ fontWeight: 600, marginBottom: '4px' }}>Input Tips:</div>
+                  <div>• Enter numbers without commas</div>
+                  <div>• Max {MAX_INPUT_LENGTH} characters</div>
+                  <div>• Max amount: 999,999</div>
+                  <div>• Use # for tags (e.g., #food)</div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </form>
+      
+      {/* Validation Error */}
+      {validationError && (
+        <div style={{
+          color: '#ff6b6b',
+          fontSize: '12px',
+          marginTop: '8px',
+          fontFamily: 'inherit'
+        }}>
+          {validationError}
+        </div>
+      )}
       
       {input && (parsed.tags.length > 0 || parsed.amount !== null) && (
         <div style={{ 
